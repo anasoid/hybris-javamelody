@@ -53,12 +53,16 @@
 
 	<import resource="classpath:net/bull/javamelody/monitoring-spring-aspectj.xml" />
 	<aop:config proxy-target-class="false">
-	
-		<!--  <aop:pointcut id="serivceHybrisPointcut" expression="bean(*Service)" />-->
+
+		<aop:pointcut id="serivceHybrisPointcut"
+			expression="bean(*Service)   
+		                &amp;&amp; !within(de.hybris.platform.servicelayer..*)
+                        &amp;&amp; !within(de.hybris.platform.acceleratorservices.dataexport..*)" />
+                        
 		<aop:pointcut id="facadeHybrisPointcut" expression="bean(*Facade)" />
 		<aop:pointcut id="PopulatorHybrisPointcut" expression="bean(*Populator)" />
 
-	<!--  	<aop:advisor advice-ref="monitoringAdvice" pointcut-ref="serivceHybrisPointcut" />-->
+		<aop:advisor advice-ref="monitoringAdvice" pointcut-ref="serivceHybrisPointcut" />
 		<aop:advisor advice-ref="monitoringAdvice" pointcut-ref="facadeHybrisPointcut" />
 		<aop:advisor advice-ref="monitoringAdvice" pointcut-ref="PopulatorHybrisPointcut" />
 
