@@ -17,6 +17,7 @@ package com.github.anasoid.hybris.javamelody;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.http.HttpSessionEvent;
 import com.github.anasoid.hybris.javamelody.constants.JavamelodyConstants;
+import com.github.anasoid.hybris.javamelody.util.HybrisJavaMelodyUtil;
 import de.hybris.platform.core.Registry;
 import net.bull.javamelody.SessionListener;
 
@@ -25,7 +26,7 @@ import net.bull.javamelody.SessionListener;
  */
 public class HybrisSessionListener extends SessionListener {
 
-  private Boolean monitoringEnabled;
+
 
   /**
    *
@@ -33,7 +34,7 @@ public class HybrisSessionListener extends SessionListener {
   public HybrisSessionListener() {
 
     super();
-
+    HybrisJavaMelodyUtil.init();
   }
 
   /**
@@ -51,7 +52,7 @@ public class HybrisSessionListener extends SessionListener {
    */
   @Override
   public void contextInitialized(ServletContextEvent event) {
-    if (isMonitoringEnabled()) {
+    if (HybrisJavaMelodyUtil.isMonitoringEnabled()) {
       super.contextInitialized(event);
     }
   }
@@ -63,7 +64,7 @@ public class HybrisSessionListener extends SessionListener {
    */
   @Override
   public void contextDestroyed(ServletContextEvent event) {
-    if (isMonitoringEnabled()) {
+    if (HybrisJavaMelodyUtil.isMonitoringEnabled()) {
       super.contextDestroyed(event);
     }
   }
@@ -75,7 +76,7 @@ public class HybrisSessionListener extends SessionListener {
    */
   @Override
   public void sessionCreated(HttpSessionEvent event) {
-    if (isMonitoringEnabled()) {
+    if (HybrisJavaMelodyUtil.isMonitoringEnabled()) {
       super.sessionCreated(event);
     }
   }
@@ -87,7 +88,7 @@ public class HybrisSessionListener extends SessionListener {
    */
   @Override
   public void sessionDestroyed(HttpSessionEvent event) {
-    if (isMonitoringEnabled()) {
+    if (HybrisJavaMelodyUtil.isMonitoringEnabled()) {
       super.sessionDestroyed(event);
     }
   }
@@ -100,7 +101,7 @@ public class HybrisSessionListener extends SessionListener {
    */
   @Override
   public void sessionDidActivate(HttpSessionEvent event) {
-    if (isMonitoringEnabled()) {
+    if (HybrisJavaMelodyUtil.isMonitoringEnabled()) {
       super.sessionDidActivate(event);
     }
   }
@@ -113,21 +114,11 @@ public class HybrisSessionListener extends SessionListener {
    */
   @Override
   public void sessionWillPassivate(HttpSessionEvent event) {
-    if (isMonitoringEnabled()) {
+    if (HybrisJavaMelodyUtil.isMonitoringEnabled()) {
       super.sessionWillPassivate(event);
     }
   }
 
 
-  private Boolean isMonitoringEnabled() {
-
-    if (monitoringEnabled == null) {
-
-      monitoringEnabled = Registry.getMasterTenant().getConfig()
-          .getBoolean(JavamelodyConstants.MONITORING_ENABLED_KEY, true);
-    }
-    return monitoringEnabled;
-
-  }
 
 }

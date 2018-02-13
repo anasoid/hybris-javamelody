@@ -22,29 +22,29 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import com.github.anasoid.hybris.javamelody.constants.JavamelodyConstants;
+import com.github.anasoid.hybris.javamelody.util.HybrisJavaMelodyUtil;
 import de.hybris.platform.core.Registry;
 
 public class HybrisMonitoringFilter extends net.bull.javamelody.MonitoringFilter {
 
-  private Boolean monitoringEnabled;
 
 
   public HybrisMonitoringFilter() {
     super();
-
+    HybrisJavaMelodyUtil.init();
   }
 
 
   @Override
   public void init(FilterConfig config) throws ServletException {
-    if (isMonitoringEnabled()) {
+    if (HybrisJavaMelodyUtil.isMonitoringEnabled()) {
       super.init(config);
     }
   }
 
   @Override
   public void destroy() {
-    if (isMonitoringEnabled()) {
+    if (HybrisJavaMelodyUtil.isMonitoringEnabled()) {
       super.destroy();
     }
   }
@@ -52,7 +52,7 @@ public class HybrisMonitoringFilter extends net.bull.javamelody.MonitoringFilter
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
-    if (isMonitoringEnabled()) {
+    if (HybrisJavaMelodyUtil.isMonitoringEnabled()) {
       super.doFilter(request, response, chain);
     } else {
       chain.doFilter(request, response);
@@ -60,14 +60,5 @@ public class HybrisMonitoringFilter extends net.bull.javamelody.MonitoringFilter
   }
 
 
-  private Boolean isMonitoringEnabled() {
-
-    if (monitoringEnabled == null) {
-      monitoringEnabled = Registry.getMasterTenant().getConfig()
-          .getBoolean(JavamelodyConstants.MONITORING_ENABLED_KEY, true);
-    }
-    return monitoringEnabled;
-
-  }
 
 }

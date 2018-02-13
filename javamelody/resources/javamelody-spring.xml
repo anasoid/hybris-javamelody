@@ -59,13 +59,27 @@
 		                &amp;&amp; !within(de.hybris.platform.servicelayer..*)
                         &amp;&amp; !within(de.hybris.platform.acceleratorservices.dataexport..*)" />
                         
-		<aop:pointcut id="facadeHybrisPointcut" expression="bean(*Facade)" />
-		<aop:pointcut id="PopulatorHybrisPointcut" expression="bean(*Populator)" />
-
+		<aop:pointcut id="facadeHybrisPointcut" 
+		              expression="bean(*Facade)"  />
+		 <aop:pointcut id="strategyHybrisPointcut" 
+		              expression="bean(*Strategy)"  />             
+		              
+		              
+		              
+		              
+		<aop:pointcut id="populatorHybrisPointcut" 
+		              expression="within(de.hybris.platform.converters.Populator) 
+		              || within(de.hybris.platform.servicelayer.dto.converter.Converter)
+		              || within(de.hybris.platform.converters.PopulatorList)" />
+        <aop:pointcut id="cronjobHybrisPointcut" 
+                      expression="within(de.hybris.platform.servicelayer.cronjob.JobPerformable) 
+                                  &amp;&amp; execution(de.hybris.platform.servicelayer.cronjob.PerformResult *.perform(..))      " />
+        
 		<aop:advisor advice-ref="monitoringAdvice" pointcut-ref="serivceHybrisPointcut" />
 		<aop:advisor advice-ref="monitoringAdvice" pointcut-ref="facadeHybrisPointcut" />
-		<aop:advisor advice-ref="monitoringAdvice" pointcut-ref="PopulatorHybrisPointcut" />
-
+		<aop:advisor advice-ref="monitoringAdvice" pointcut-ref="populatorHybrisPointcut" />
+        <aop:advisor advice-ref="monitoringAdvice" pointcut-ref="cronjobHybrisPointcut" />
+        <aop:advisor advice-ref="monitoringAdvice" pointcut-ref="strategyHybrisPointcut" />
 
 	</aop:config>
 
